@@ -120,7 +120,7 @@
 		height: 37px;
 		margin: 10px 0 0 10px;
 		background:
-			url(resource/images/marker_number_purple.png)
+			url(${path}/resource/images/marker_number_purple.png)
 			no-repeat;
 	}
 	
@@ -248,7 +248,7 @@
    	#star {
    		width: 25px;
    		height: 25px;
-    	background: url('resource/images/unfavorite.png') no-repeat;
+    	background: url('${path}/resource/images/unfavorite.png') no-repeat;
     	background-size: contain;
     	border: 0px;
     	vertical-align: top;
@@ -526,7 +526,7 @@
 	            	// 클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
 		            // 마커의 이미지를 클릭 이미지로 변경합니다
 		            if (!selectedMarker || selectedMarker !== marker) {
-			            imageSrc = 'resource/images/marker_number_orange.png';
+			            imageSrc = '${path}/resource/images/marker_number_orange.png';
 			            imageSize = new kakao.maps.Size(36, 37);  // 마커 이미지의 크기
 	        	        imgOptions =  {
 	        	            spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
@@ -556,7 +556,7 @@
 		                // 클릭된 마커의 이미지를 기본 이미지로 변경하고
 		                if (!!selectedMarker) {
 		                	
-		                	imageSrc = 'resource/images/marker_number_purple.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+		                	imageSrc = '${path}/resource/images/marker_number_purple.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
 		                	imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
 		        	        imgOptions =  {
 		        	            spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
@@ -610,7 +610,7 @@
 	            	selectOverlay = customOverlay2;
 	            	
 					if (!selectedMarker || selectedMarker !== marker) {
-						imageSrc = 'resource/images/marker_number_orange.png';
+						imageSrc = '${path}/resource/images/marker_number_orange.png';
 						imageSize = new kakao.maps.Size(36, 37);  // 마커 이미지의 크기
 					    imgOptions =  {
 					        spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
@@ -637,7 +637,7 @@
            				geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
 			 	   
 						if (!!selectedMarker) {
-							imageSrc = 'resource/images/marker_number_purple.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+							imageSrc = '${path}/resource/images/marker_number_purple.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
 							imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
 							imgOptions =  {
 								spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
@@ -703,7 +703,7 @@
 	--%>
 	// 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
 	function addMarker(position, idx, title) {
-	    var imageSrc = 'resource/images/marker_number_purple.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+	    var imageSrc = '${path}/resource/images/marker_number_purple.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
         	imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
 	        imgOptions =  {
 	            spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기

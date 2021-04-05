@@ -46,11 +46,16 @@ public class MemberController {
 			return "member/join";
 		}
 		try {
-			int result = memberService.insertMember(memberVO);
-			if (result == 1) {
-				model.addAttribute("msg", "가입을 환영합니다! 로그인을 해주세요💜");
-				model.addAttribute("uri", request.getContextPath() + "/login");
-				return "common/alert";
+			//중복확인 여부
+			if (memberVO.getIdCheck() == 1) {
+				int result = memberService.insertMember(memberVO);
+				if (result == 1) {
+					model.addAttribute("msg", "가입을 환영합니다! 로그인을 해주세요💜");
+					model.addAttribute("uri", request.getContextPath() + "/login");
+					return "common/alert";
+				}
+			} else if (memberVO.getIdCheck() == 0) {
+				errors.rejectValue("id", "duplicate.id");
 			}
 		} catch (DuplicateKeyException e) {
 			errors.rejectValue("id", "duplicate.id");

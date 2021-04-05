@@ -12,5 +12,6 @@ public class MemberVO {
 	private String name;
 	private LocalDateTime reg_date;
 	
+	private Long idCheck;
 	private String passwordCheck;
 }

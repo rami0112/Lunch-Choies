@@ -25,6 +25,7 @@
 			<div style="display:inline-block;">
 				<input type="text" name="id" class="form-control" id="id-form" aria-describedby="id-hint" value="${memberVO.id}">
 				<button type="button" class="btn btn-outline-primary" id="id-checkBtn">중복확인</button>
+				<input type="hidden" name="idCheck" class="id-check" value="0">
 			</div>
 		</div>
 
@@ -65,6 +66,10 @@
 			},
 			'json'
 		);
+	});
+
+	$('#id-checkBtn').click(function() {
+		$('.id-check').val(1);
 	});
 	
 </script>
