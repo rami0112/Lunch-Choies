@@ -13,8 +13,16 @@ public class MapDAO {
 	private SqlSession sqlSession;
 	private final String NAMESPACE = "mapper.MapMapper.";
 	
+	public MapVO selectMap(MapVO mapVO) {
+		return sqlSession.selectOne(NAMESPACE + "selectMap", mapVO);
+	}
+	
 	public int insertMap(MapVO mapVO) {
 		return sqlSession.insert(NAMESPACE + "insertMap", mapVO);
+	}
+	
+	public int deleteMap(MapVO mapVO) {
+		return sqlSession.insert(NAMESPACE + "deleteMap", mapVO);
 	}
 	
 }

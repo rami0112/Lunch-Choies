@@ -2,7 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.MapMapper">
-
+	
+	<select id="selectMap" parameterType="mapVO" resultType="mapVO">
+		select *
+		from map
+		inner join member
+		on map.member_id = member.id
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test = "member_id != null">
+				and member.id = #{member_id}
+			</if>
+			<if test = "address != null">
+				and map.address = #{address}
+			</if>
+		</trim>
+	</select>
+	
 	<insert id="insertMap" parameterType="mapVO">
 		insert into
 		map (
@@ -11,13 +26,27 @@
 			, lat
 			, lon
 			, favo
+			, member_id
 		) values (
 			#{place_name}
 			, #{address}
 			, #{lat}
 			, #{lon}
 			, #{favo}
+			, #{member_id}
 		)
 	</insert>
+	
+	<delete id="deleteMap" parameterType="mapVO">
+		delete from map
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test = "member_id != null">
+				and member_id = #{member_id}
+			</if>
+			<if test = "address != null">
+				and address = #{address}
+			</if>
+		</trim>
+	</delete>
 	
 </mapper>

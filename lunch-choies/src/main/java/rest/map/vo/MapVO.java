@@ -10,4 +10,5 @@ public class MapVO {
 	private double lat;
 	private double lon;
 	private Long favo;
+	private String member_id;
 }

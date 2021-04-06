@@ -30,9 +30,22 @@ public class MapController {
 	@ResponseBody
 	public Map<String, Object> favorites(MapVO mapVO) {
 		Map<String, Object> rs = new HashMap<String, Object>();
-		int result = mapService.insertMap(mapVO);
-		if (result == 1) {
-			rs.put("msg", "즐겨찾기 등록 완료❤");
+		
+		MapVO mapDB = mapService.selectMap(mapVO);
+		if (mapDB == null) {
+			int result = mapService.insertMap(mapVO);
+			if (result == 1) {
+				rs.put("msg", "즐겨찾기 등록 완료❤");
+				rs.put("background", "/resource/images/favorite.png') no-repeat");
+				rs.put("backgroundSize", "contain");
+			}
+		} else if (mapDB != null) {
+			int result = mapService.deleteMap(mapVO);
+			if (result == 1) {
+				rs.put("msg", "즐겨찾기 해제💔");
+				rs.put("background", "/resource/images/unfavorite.png') no-repeat");
+				rs.put("backgroundSize", "contain");
+			}
 		}
 		return rs;
 	}

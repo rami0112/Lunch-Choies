@@ -220,7 +220,6 @@
 		font-size: 12px;
 	}
 	
-
 	.wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 112px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
     .wrap * {padding: 0;margin: 0;}
     .wrap .info2 {width: 286px;height: 100px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
@@ -268,6 +267,7 @@
 	<div id="map"></div>
 	
 	<form:form name="favoForm" id="favoForm" modelAttribute="mapVO" action="favorites" method="post">
+		<input type="text" name="member_id" value="${sessionScope.member.id}"><br>
 		<label>장소명</label>
 		<input type="text" id="place-name" name="place_name"> <br>
 		
@@ -299,21 +299,24 @@
 	    
 </div>
     
-    
 <script>
-	//즐겨찾기 기능
+	//즐겨찾기 등록
 	$(document).on("click", "#star", function() {
 		var form = document.favoForm;
+
+		var member_id = form.member_id.value;
 		var place_name = form.place_name.value;
 		var address = form.address.value;
 		var lat = form.lat.value;
 		var lon = form.lon.value;
 		var favo = form.favo.value;
+
 		var action = './favorites';
 
 		$.post(
 			action,
 			{
+				member_id : member_id,
 				place_name : place_name,
 				address : address,
 				lat : lat,
@@ -322,13 +325,15 @@
 			},
 			function(data) {
 				alert(data.msg);
+				$("#star").css("background", "url('${path}" + data.background);
+				$("#star").css("backgroundSize", data.backgroundSize);
 			},
 			'json'
 		);
+
 	});
-		<%--$(document).on("click", "#star", function() {
-		this.style.background="url('${path}/resource/images/favorite.png') no-repeat";
-		this.style.backgroundSize="contain";--%>
+<%--			this.style.background = data.background;
+			this.style.backgroundSize = data.backgroundSize;--%>
 
 	//사이즈 맞추기
 	$(document).ready(function() {
