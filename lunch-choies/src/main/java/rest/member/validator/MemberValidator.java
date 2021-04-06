@@ -25,7 +25,7 @@ public class MemberValidator implements Validator {
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "id", "required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "required");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "member_name", "required");
 		
 		if (!memberVO.getPassword().equals(memberVO.getPasswordCheck())) {
 			errors.rejectValue("passwordCheck", "required.passwordCheck");

@@ -21,15 +21,14 @@
 		member (
 			id
 			, password
-			, name
+			, member_name
 			, reg_date
 		) values (
 			#{id}
 			, #{password}
-			, #{name}
+			, #{member_name}
 			, now()
 		)
-		
 	</insert>
 
 </mapper>

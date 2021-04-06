@@ -7,5 +7,6 @@
 	
 	<typeAliases>
 		<typeAlias alias="memberVO" type="rest.member.vo.MemberVO"/>
+		<typeAlias alias="mapVO" type="rest.map.vo.MapVO"/>
 	</typeAliases>
 </configuration>

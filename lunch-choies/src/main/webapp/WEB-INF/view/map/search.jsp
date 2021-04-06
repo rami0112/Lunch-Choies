@@ -204,7 +204,7 @@
 		font-weight: bold;
 	}
 	
-	#save {
+	#favoForm {
 		width: 350px;
 		height: 200px;
 		position: absolute;
@@ -267,18 +267,19 @@
 <div class="map_wrap">
 	<div id="map"></div>
 	
-	<div id="save">
+	<form:form name="favoForm" id="favoForm" modelAttribute="mapVO" action="favorites" method="post">
 		<label>장소명</label>
-		<input type="text" id="place-name" name="place-name"> <br>
+		<input type="text" id="place-name" name="place_name"> <br>
 		
 		<label>주소</label>		
 		<input type="text" id="address" name="address"> <br>
 		
 		<input type="text" id="lat" name="lat">
 		<input type="text" id="lon" name="lon"> <br>
+		<input type="text" name="favo" value="1">
 		
 		<input type="submit" value="저장하기">
-	</div>
+	</form:form>
 	
 	<div id="menu_wrap">
         <div class="option" id="top">
@@ -300,6 +301,36 @@
     
     
 <script>
+	//즐겨찾기 기능
+	$(document).on("click", "#star", function() {
+		var form = document.favoForm;
+		var place_name = form.place_name.value;
+		var address = form.address.value;
+		var lat = form.lat.value;
+		var lon = form.lon.value;
+		var favo = form.favo.value;
+		var action = './favorites';
+
+		$.post(
+			action,
+			{
+				place_name : place_name,
+				address : address,
+				lat : lat,
+				lon : lon,
+				favo : favo
+			},
+			function(data) {
+				alert(data.msg);
+			},
+			'json'
+		);
+	});
+		<%--$(document).on("click", "#star", function() {
+		this.style.background="url('${path}/resource/images/favorite.png') no-repeat";
+		this.style.backgroundSize="contain";--%>
+
+	//사이즈 맞추기
 	$(document).ready(function() {
 		resizeContent();
 	});
@@ -473,27 +504,6 @@
 		        closeBtn.onclick = function () {
 		        	customOverlay2.setMap(null);
 		        };
-
-				<%--
-		    	var content = '<div class="wrap">' + 
-		        '    <div class="info2">' + 
-		        '        <div class="title">' + 
-		        title + 
-		        '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' + 
-		        '        </div>' + 
-		        '        <div class="body">' + 
-		        '            <div class="img">' +
-		        '                <img src="https://cfile181.uf.daum.net/image/250649365602043421936D" width="73" height="70">' +
-		        '           </div>' + 
-		        '            <div class="desc">' + 
-		        '                <div class="ellipsis">제주특별자치도 제주시 첨단로 242</div>' + 
-		        '                <div class="jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>' + 
-		        '                <div><a href="https://www.kakaocorp.com/main" target="_blank" class="link">홈페이지</a></div>' + 
-		        '            </div>' + 
-		        '        </div>' + 
-		        '    </div>' +    
-		        '</div>';
-				--%>
 				
 		        content.appendChild(closeBtn);
 		        customOverlay2.setContent(content);
@@ -600,7 +610,7 @@
 	     			//document.getElementsByClassName('item')[1].style.backgroundColor="#ded6ea";
 		 	    };
 		 	    --%>
-		 	    
+
 		 		itemEl.onclick = function (idx) {
 		 			if (selectOverlay) {
 	            		selectOverlay.setMap(null);
@@ -671,7 +681,6 @@
 	    // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
 	    map.setBounds(bounds);
 	}
-
 
 	// 검색결과 항목을 Element로 반환하는 함수입니다
 	function getListItem(index, places) {

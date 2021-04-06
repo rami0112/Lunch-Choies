@@ -43,8 +43,8 @@
 
 		<div class="form-group">
 			<label class="col-form-label" for="name-form" style="float:left;">이름*&nbsp&nbsp</label>
-			<p id="name-hint" class="col-form-label" style="color:red; font-size:50%;"><form:errors path="name" /></p> 
-			<input type="text" name="name" class="form-control" id="name-form" aria-describedby="name-hint" value="${memberVO.name}">
+			<p id="name-hint" class="col-form-label" style="color:red; font-size:50%;"><form:errors path="member_name" /></p> 
+			<input type="text" name="member_name" class="form-control" id="name-form" aria-describedby="name-hint" value="${memberVO.member_name}">
 		</div>
 
 		<input type="submit" class="btn btn-primary btn-lg btn-block" value="회원가입" style="margin-top: 40px;">
