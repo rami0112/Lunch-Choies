@@ -26,20 +26,20 @@ public class MapController {
 	}
 
 	//장소 즐겨찾기 등록 ajax
-	@PostMapping(value="favorites", produces="application/json;charset=UTF-8")
+	@PostMapping(value="favoritesCheck", produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public Map<String, Object> favorites(MapVO mapVO) {
+	public Map<String, Object> favoritesCheck(MapVO mapVO) {
 		Map<String, Object> rs = new HashMap<String, Object>();
 		
-		MapVO mapDB = mapService.selectMap(mapVO);
-		if (mapDB == null) {
+		int mapDB = mapService.countMap(mapVO);
+		if (mapDB == 0) {
 			int result = mapService.insertMap(mapVO);
 			if (result == 1) {
 				rs.put("msg", "즐겨찾기 등록 완료❤");
 				rs.put("background", "/resource/images/favorite.png') no-repeat");
 				rs.put("backgroundSize", "contain");
 			}
-		} else if (mapDB != null) {
+		} else if (mapDB == 1) {
 			int result = mapService.deleteMap(mapVO);
 			if (result == 1) {
 				rs.put("msg", "즐겨찾기 해제💔");
@@ -49,5 +49,23 @@ public class MapController {
 		}
 		return rs;
 	}
+	
+	//장소 즐겨찾기 ajax
+	@PostMapping(value="favorites", produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public Map<String, Object> favorites(MapVO mapVO) {
+		Map<String, Object> rs = new HashMap<String, Object>();
+		
+		int mapDB = mapService.countMap(mapVO);
+		if (mapDB == 1) {
+				rs.put("background", "/resource/images/favorite.png') no-repeat");
+				rs.put("backgroundSize", "contain");
+		} else if (mapDB == 0) {
+				rs.put("background", "/resource/images/unfavorite.png') no-repeat");
+				rs.put("backgroundSize", "contain");
+		}
+		return rs;
+	}
+
 
 }

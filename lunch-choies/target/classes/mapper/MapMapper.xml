@@ -12,12 +12,26 @@
 			<if test = "member_id != null">
 				and member.id = #{member_id}
 			</if>
+			<if test = "place_name != null">
+				and map.place_name = #{place_name}
+			</if>
 			<if test = "address != null">
 				and map.address = #{address}
 			</if>
 		</trim>
 	</select>
 	
+	<select id="countMap" parameterType="mapVO" resultType="int">
+		select count(*)
+		from map
+		inner join member
+		on map.member_id = member.id
+		where member.id = #{member_id}
+		and map.place_name = #{place_name}
+		and map.lat = #{lat}
+		and map.lon = #{lon}
+	</select>
+		
 	<insert id="insertMap" parameterType="mapVO">
 		insert into
 		map (
@@ -25,14 +39,12 @@
 			, address
 			, lat
 			, lon
-			, favo
 			, member_id
 		) values (
 			#{place_name}
 			, #{address}
 			, #{lat}
 			, #{lon}
-			, #{favo}
 			, #{member_id}
 		)
 	</insert>

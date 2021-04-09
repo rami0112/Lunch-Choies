@@ -17,12 +17,16 @@ public class MapDAO {
 		return sqlSession.selectOne(NAMESPACE + "selectMap", mapVO);
 	}
 	
+	public int countMap(MapVO mapVO) {
+		return sqlSession.selectOne(NAMESPACE + "countMap", mapVO);
+	}
+	
 	public int insertMap(MapVO mapVO) {
 		return sqlSession.insert(NAMESPACE + "insertMap", mapVO);
 	}
 	
 	public int deleteMap(MapVO mapVO) {
-		return sqlSession.insert(NAMESPACE + "deleteMap", mapVO);
+		return sqlSession.delete(NAMESPACE + "deleteMap", mapVO);
 	}
 	
 }

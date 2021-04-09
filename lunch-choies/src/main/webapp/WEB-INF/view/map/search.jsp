@@ -276,7 +276,6 @@
 		
 		<input type="text" id="lat" name="lat">
 		<input type="text" id="lon" name="lon"> <br>
-		<input type="text" name="favo" value="1">
 		
 		<input type="submit" value="저장하기">
 	</form:form>
@@ -300,7 +299,7 @@
 </div>
     
 <script>
-	//즐겨찾기 등록
+	//즐겨찾기 등록/해제
 	$(document).on("click", "#star", function() {
 		var form = document.favoForm;
 
@@ -309,9 +308,8 @@
 		var address = form.address.value;
 		var lat = form.lat.value;
 		var lon = form.lon.value;
-		var favo = form.favo.value;
 
-		var action = './favorites';
+		var action = './favoritesCheck';
 
 		$.post(
 			action,
@@ -320,8 +318,7 @@
 				place_name : place_name,
 				address : address,
 				lat : lat,
-				lon : lon,
-				favo : favo
+				lon : lon
 			},
 			function(data) {
 				alert(data.msg);
@@ -330,11 +327,8 @@
 			},
 			'json'
 		);
-
 	});
-<%--			this.style.background = data.background;
-			this.style.backgroundSize = data.backgroundSize;--%>
-
+	
 	//사이즈 맞추기
 	$(document).ready(function() {
 		resizeContent();
@@ -349,6 +343,7 @@
 		<%--var topHeight = $("#top").height();--%>
 		$('#content').css({'height':(totalHeight-75)+'px'});
 	}
+	
 	<%--
 	// --사이드 바 따라다니게--
 	//follow quick menu
@@ -515,7 +510,7 @@
 		        
 		     	// 커스텀 오버레이를 닫기 위해 호출되는 함수입니다 
 		        function closeOverlay() {
-		        	customOverlay2.setMap(null);     
+		        	customOverlay2.setMap(null);
 		        }
 		        
 	            kakao.maps.event.addListener(marker, 'mouseover', function() {
@@ -525,17 +520,6 @@
 	            kakao.maps.event.addListener(marker, 'mouseout', function() {
 	            	customOverlay.setMap(null);
 	            });
-
-	            kakao.maps.event.addListener(marker, 'click', function() {
-	            	//$(".item").trigger("click");
-	            	if (selectOverlay) {
-	            		selectOverlay.setMap(null);
-	            	}
-	            	customOverlay2.setMap(map);
-	            	selectOverlay = customOverlay2;
-
-					//itemEl.style.backgroundColor="yellow";
-		        });
 
 	            kakao.maps.event.addListener(marker, 'click', function(idx) {
 	            	// 클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
@@ -556,7 +540,7 @@
            				document.getElementById('lon').value = latlng.getLng();
            				document.getElementById('place-name').value = title;
            				
-           				var geocoder = new kakao.maps.services.Geocoder();
+           				var geocoder = new kakao.maps.services.Geocoder(); // 주소-좌표간 변환 서비스 객체를 생성한다.
 
            				var coord = new kakao.maps.LatLng(latlng.getLat(), latlng.getLng());
            				var callback = function(result, status) {
@@ -565,8 +549,8 @@
            				    }
            				};
 
-           				geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
-           				
+           				geocoder.coord2Address(coord.getLng(), coord.getLat(), callback); // 좌표 값에 해당하는 구 주소와 도로명 주소 정보를 요청한다.
+
 	        	     	// 클릭된 마커 객체가 null이 아니면
 		                // 클릭된 마커의 이미지를 기본 이미지로 변경하고
 		                if (!!selectedMarker) {
@@ -591,38 +575,40 @@
 		            selectedMarker = marker;
 	            });
 
-	            //itemEl.onmouseover =  function () {
-	            //    displayInfowindow(marker, title);
-	            //};
-			        
-	            //itemEl.onmouseover =  function () {
-	            //	this.style.backgroundColor="#ded6ea";
-	 	        //};
-	 	        
-	            //itemEl.onmouseout =  function () {
-	            //	this.style.backgroundColor="";
-	 	        //};
-	 	        
-	 	        <%--
-	            itemEl.onclick = function () {
+	            kakao.maps.event.addListener(marker, 'click', function() {
 	            	if (selectOverlay) {
 	            		selectOverlay.setMap(null);
-	            	} 
-		            //this.style.backgroundColor="yellow";
+	            	}
+
+	            	var form = document.favoForm;
+
+       				var member_id = form.member_id.value;
+       				var place_name = form.place_name.value;
+       				var lat = form.lat.value;
+       				var lon = form.lon.value;
+
+       				var action = './favorites';
+
+       				$.post(
+       					action,
+       					{
+       						member_id : member_id,
+       						place_name : place_name,
+       						lat : lat,
+       						lon : lon
+       					},
+       					function(data) {
+       						$("#star").css("background", "url('${path}" + data.background);
+       						$("#star").css("backgroundSize", data.backgroundSize);
+       					},
+       					'json'
+       				);
+       				
 	            	customOverlay2.setMap(map);
 	            	selectOverlay = customOverlay2;
-
-	     			//document.getElementsByClassName('item')[1].style.backgroundColor="#ded6ea";
-		 	    };
-		 	    --%>
-
+		        });
+		        
 		 		itemEl.onclick = function (idx) {
-		 			if (selectOverlay) {
-	            		selectOverlay.setMap(null);
-	            	} 
-		            //this.style.backgroundColor="yellow";
-	            	customOverlay2.setMap(map);
-	            	selectOverlay = customOverlay2;
 	            	
 					if (!selectedMarker || selectedMarker !== marker) {
 						imageSrc = '${path}/resource/images/marker_number_orange.png';
@@ -650,7 +636,7 @@
            				};
            				
            				geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
-			 	   
+
 						if (!!selectedMarker) {
 							imageSrc = '${path}/resource/images/marker_number_purple.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
 							imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
@@ -667,13 +653,40 @@
 		 		}
 		 		// 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
 	            selectedMarker = marker;
-			 	   
-			 	};
+
+	            if (selectOverlay) {
+            		selectOverlay.setMap(null);
+            	} 
+
+	            var form = document.favoForm;
+
+   				var member_id = form.member_id.value;
+   				var place_name = form.place_name.value;
+   				var lat = form.lat.value;
+   				var lon = form.lon.value;
+
+   				var action = './favorites';
+
+   				$.post(
+   					action,
+   					{
+   						member_id : member_id,
+   						place_name : place_name,
+   						lat : lat,
+   						lon : lon
+   					},
+   					function(data) {
+   						$("#star").css("background", "url('${path}" + data.background);
+   						$("#star").css("backgroundSize", data.backgroundSize);
+   					},
+   					'json'
+   				);
+   				
+            	customOverlay2.setMap(map);
+            	selectOverlay = customOverlay2;
+
+		 		};
 	 	        
-	            //itemEl.onmouseout =  function () {
-	            //    infowindow.close();
-	            //};
-	        	            
 	        })(marker, places[i].place_name);
 	
 	        fragment.appendChild(itemEl);
@@ -710,11 +723,7 @@
 	
 	    return el;
 	}
-    <%--
-	$(document).on("click", ".item", function() {
-	    this.style.backgroundColor="#ded6ea";
-	});
-	--%>
+
 	// 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
 	function addMarker(position, idx, title) {
 	    var imageSrc = '${path}/resource/images/marker_number_purple.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
@@ -775,18 +784,7 @@
 	    paginationEl.appendChild(fragment);
 	}
 
-	<%--
-	// 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
-	// 인포윈도우에 장소명을 표시합니다
-	function displayInfowindow(marker, title) {
-		var content = '<div class="info-title">' + title + '</div>';
-	
-	    infowindow.setContent(content);
-	    infowindow.open(map, marker);
-	}
-	--%>
-
-	 // 검색결과 목록의 자식 Element를 제거하는 함수입니다
+	// 검색결과 목록의 자식 Element를 제거하는 함수입니다
 	function removeAllChildNods(el) {   
 	    while (el.hasChildNodes()) {
 	        el.removeChild (el.lastChild);

@@ -16,6 +16,10 @@ public class MapService {
 		return mapDAO.selectMap(mapVO);
 	}
 	
+	public int countMap(MapVO mapVO) {
+		return mapDAO.countMap(mapVO);
+	}
+	
 	public int insertMap(MapVO mapVO) {
 		return mapDAO.insertMap(mapVO);
 	}
