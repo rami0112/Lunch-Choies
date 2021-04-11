@@ -204,6 +204,7 @@
 		font-weight: bold;
 	}
 	
+	<%--
 	#favoForm {
 		width: 350px;
 		height: 200px;
@@ -219,6 +220,7 @@
 		border-radius: 15px;
 		font-size: 12px;
 	}
+	--%>
 	
 	.wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 112px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
     .wrap * {padding: 0;margin: 0;}
@@ -266,36 +268,28 @@
 <div class="map_wrap">
 	<div id="map"></div>
 	
-	<form:form name="favoForm" id="favoForm" modelAttribute="mapVO" action="favorites" method="post">
-		<input type="text" name="member_id" value="${sessionScope.member.id}"><br>
-		<label>장소명</label>
-		<input type="text" id="place-name" name="place_name"> <br>
-		
-		<label>주소</label>		
-		<input type="text" id="address" name="address"> <br>
-		
-		<input type="text" id="lat" name="lat">
-		<input type="text" id="lon" name="lon"> <br>
-		
-		<input type="submit" value="저장하기">
+	<form:form name="favoForm" id="favoForm" modelAttribute="mapVO" method="post">
+		<input type="hidden" id="member_id" name="member_id" value="${sessionScope.member.id}">
+		<input type="hidden" id="place-name" name="place_name">
+		<input type="hidden" id="address" name="address">
+		<input type="hidden" id="lat" name="lat">
+		<input type="hidden" id="lon" name="lon">
 	</form:form>
 	
 	<div id="menu_wrap">
         <div class="option" id="top">
-                <form onsubmit="searchPlaces(); return false;">
-                    <div class="form-group">
-  						<input type="text" class="form-control" id="keyword" placeholder="검색어를 입력해주세요." style="width:220px;float:left;">
-					</div>
-					<button type="submit" class="btn btn-primary" style="float:left;margin-left:10px;">Search</button>
-                </form>
+			<form onsubmit="searchPlaces(); return false;">
+				<div class="form-group">
+					<input type="text" class="form-control" id="keyword" placeholder="검색어를 입력해주세요." style="width:220px;float:left;">
+				</div>
+				<button type="submit" class="btn btn-primary" style="float:left;margin-left:10px;">Search</button>
+			</form>
         </div>
-			<div id="content" style="position:absolute;overflow:auto;width:350px;top:75px;">
-	        	<ul id="placesList"></ul>
-	        	<div id="pagination"></div>
-	        </div>
-        
+		<div id="content" style="position:absolute;overflow:auto;width:350px;top:75px;">
+        	<ul id="placesList"></ul>
+        	<div id="pagination"></div>
+        </div>
     </div>
-	    
 </div>
     
 <script>

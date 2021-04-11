@@ -1,5 +1,7 @@
 package rest.map.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,7 @@ public class MapService {
 	@Autowired
 	private MapDAO mapDAO;
 	
-	public MapVO selectMap(MapVO mapVO) {
+	public List<MapVO> selectMap(MapVO mapVO) {
 		return mapDAO.selectMap(mapVO);
 	}
 	

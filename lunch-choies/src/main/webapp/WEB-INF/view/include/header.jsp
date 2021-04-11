@@ -64,7 +64,7 @@
 								<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Map</a>
 								<div class="dropdown-menu">
 							    	<a class="dropdown-item" href="<c:url value="/map/search" />">Search</a>
-							    	<a class="dropdown-item" href="#">Favorite</a>
+							    	<a class="dropdown-item" href="<c:url value="/map/favorite" />">Favorite</a>
 								</div>
 							</li>
 					      

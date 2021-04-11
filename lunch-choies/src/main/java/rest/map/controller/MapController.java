@@ -1,14 +1,18 @@
 package rest.map.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fasterxml.jackson.annotation.JsonAlias;
 
 import rest.map.service.MapService;
 import rest.map.vo.MapVO;
@@ -67,5 +71,25 @@ public class MapController {
 		return rs;
 	}
 
+	@GetMapping("favorite")
+	public String favoriteGet() {
+		return "map/favorite";
+	}
+	
+	//즐겨찾기한 장소찾기 ajax
+	@PostMapping(value="star", produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public Map<String, Object> star(MapVO mapVO) {
+		Map<String, Object> rs = new HashMap<String, Object>();
+		
+		List<MapVO> mapDB = mapService.selectMap(mapVO);
+		if (mapDB != null) {
+			/*for (int i = 0; i < mapDB.size(); i++) {*/
+				rs.put("size", mapDB.size());
+				rs.put("mapDB", mapDB);
+		}
+		return rs;
+		
+	}
 
 }

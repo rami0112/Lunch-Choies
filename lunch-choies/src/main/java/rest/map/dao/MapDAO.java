@@ -1,5 +1,7 @@
 package rest.map.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -13,8 +15,8 @@ public class MapDAO {
 	private SqlSession sqlSession;
 	private final String NAMESPACE = "mapper.MapMapper.";
 	
-	public MapVO selectMap(MapVO mapVO) {
-		return sqlSession.selectOne(NAMESPACE + "selectMap", mapVO);
+	public List<MapVO> selectMap(MapVO mapVO) {
+		return sqlSession.selectList(NAMESPACE + "selectMap", mapVO);
 	}
 	
 	public int countMap(MapVO mapVO) {

@@ -8,17 +8,7 @@
 		from map
 		inner join member
 		on map.member_id = member.id
-		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test = "member_id != null">
-				and member.id = #{member_id}
-			</if>
-			<if test = "place_name != null">
-				and map.place_name = #{place_name}
-			</if>
-			<if test = "address != null">
-				and map.address = #{address}
-			</if>
-		</trim>
+		where member.id = #{member_id}
 	</select>
 	
 	<select id="countMap" parameterType="mapVO" resultType="int">
