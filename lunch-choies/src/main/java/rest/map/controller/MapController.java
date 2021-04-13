@@ -62,11 +62,11 @@ public class MapController {
 		
 		int mapDB = mapService.countMap(mapVO);
 		if (mapDB == 1) {
-				rs.put("background", "/resource/images/favorite.png') no-repeat");
-				rs.put("backgroundSize", "contain");
+			rs.put("background", "/resource/images/favorite.png') no-repeat");
+			rs.put("backgroundSize", "contain");
 		} else if (mapDB == 0) {
-				rs.put("background", "/resource/images/unfavorite.png') no-repeat");
-				rs.put("backgroundSize", "contain");
+			rs.put("background", "/resource/images/unfavorite.png') no-repeat");
+			rs.put("backgroundSize", "contain");
 		}
 		return rs;
 	}

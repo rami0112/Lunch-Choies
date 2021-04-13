@@ -41,14 +41,9 @@
 	
 	<delete id="deleteMap" parameterType="mapVO">
 		delete from map
-		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test = "member_id != null">
-				and member_id = #{member_id}
-			</if>
-			<if test = "address != null">
-				and address = #{address}
-			</if>
-		</trim>
+		where member_id = #{member_id}
+		and place_name = #{place_name}
+		and address = #{address}
 	</delete>
 	
 </mapper>

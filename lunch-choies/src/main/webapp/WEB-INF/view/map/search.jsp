@@ -203,7 +203,6 @@
 	#placesList li h5 {
 		font-weight: bold;
 	}
-	
 	<%--
 	#favoForm {
 		width: 350px;
@@ -221,7 +220,6 @@
 		font-size: 12px;
 	}
 	--%>
-	
 	.wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 112px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
     .wrap * {padding: 0;margin: 0;}
     .wrap .info2 {width: 286px;height: 100px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
@@ -242,7 +240,7 @@
     .info3 {
     	background-color: #fff;
     	padding: 0 5px;
-    	border: 2px solid #593196;
+    	border: 3px solid #593196;
     	border-radius: 30px;
    	}
    	
@@ -257,6 +255,7 @@
     }
     
     .btn-secondary {
+    	line-height: 42px;
     	width: 127px;
     	height: 42px;
     	border-radius: 5px;
@@ -322,6 +321,34 @@
 			'json'
 		);
 	});
+
+	//즐겨찾기 표시
+	function favorites() {
+
+		var form = document.favoForm;
+	
+		var member_id = form.member_id.value;
+		var place_name = form.place_name.value;
+		var lat = form.lat.value;
+		var lon = form.lon.value;
+
+		var action = './favorites';
+
+		$.post(
+			action,
+			{
+				member_id : member_id,
+				place_name : place_name,
+				lat : lat,
+				lon : lon
+			},
+			function(data) {
+				$("#star").css("background", "url('${path}" + data.background);
+				$("#star").css("backgroundSize", data.backgroundSize);
+			},
+			'json'
+		);
+	}
 	
 	//사이즈 맞추기
 	$(document).ready(function() {
@@ -466,7 +493,7 @@
 		            content: '<div class="info3">' + title + '</div>',
 		            position: marker.getPosition(),
 		            xAnchor: 0.5, // 컨텐츠의 x 위치
-		            yAnchor: 2.7 // 컨텐츠의 y 위치
+		            yAnchor: 2.5 // 컨텐츠의 y 위치
 		        });
 
 		        var customOverlay2 = new kakao.maps.CustomOverlay({
@@ -483,7 +510,7 @@
 			        				'<button type="button" id="star">' + '</button>' + title + 
 			        			'</div>' +
 			        			'<div>' + 
-			        				'<button type="button" class="btn btn-secondary">' + '상세보기' + '</button>' +
+			        				'<a href="' + places[i].place_url + '" target="_blank" class="btn btn-secondary">' + '상세보기' + '</a>' +
 			        				'<button type="button" class="btn btn-secondary">' + '리뷰보기' + '</button>' +
 			        			'</div>' + 
 			        		'</div>' + 
@@ -516,6 +543,7 @@
 	            });
 
 	            kakao.maps.event.addListener(marker, 'click', function(idx) {
+		            
 	            	// 클릭된 마커가 없고, click 마커가 클릭된 마커가 아니면
 		            // 마커의 이미지를 클릭 이미지로 변경합니다
 		            if (!selectedMarker || selectedMarker !== marker) {
@@ -537,6 +565,7 @@
            				var geocoder = new kakao.maps.services.Geocoder(); // 주소-좌표간 변환 서비스 객체를 생성한다.
 
            				var coord = new kakao.maps.LatLng(latlng.getLat(), latlng.getLng());
+
            				var callback = function(result, status) {
            				    if (status === kakao.maps.services.Status.OK) {
            				    	document.getElementById('address').value = result[0].address.address_name;
@@ -573,35 +602,13 @@
 	            	if (selectOverlay) {
 	            		selectOverlay.setMap(null);
 	            	}
-
-	            	var form = document.favoForm;
-
-       				var member_id = form.member_id.value;
-       				var place_name = form.place_name.value;
-       				var lat = form.lat.value;
-       				var lon = form.lon.value;
-
-       				var action = './favorites';
-
-       				$.post(
-       					action,
-       					{
-       						member_id : member_id,
-       						place_name : place_name,
-       						lat : lat,
-       						lon : lon
-       					},
-       					function(data) {
-       						$("#star").css("background", "url('${path}" + data.background);
-       						$("#star").css("backgroundSize", data.backgroundSize);
-       					},
-       					'json'
-       				);
-       				
-	            	customOverlay2.setMap(map);
+	            	
+	            	favorites();
+	            	
+       				customOverlay2.setMap(map);
 	            	selectOverlay = customOverlay2;
 		        });
-		        
+
 		 		itemEl.onclick = function (idx) {
 	            	
 					if (!selectedMarker || selectedMarker !== marker) {
@@ -652,29 +659,7 @@
             		selectOverlay.setMap(null);
             	} 
 
-	            var form = document.favoForm;
-
-   				var member_id = form.member_id.value;
-   				var place_name = form.place_name.value;
-   				var lat = form.lat.value;
-   				var lon = form.lon.value;
-
-   				var action = './favorites';
-
-   				$.post(
-   					action,
-   					{
-   						member_id : member_id,
-   						place_name : place_name,
-   						lat : lat,
-   						lon : lon
-   					},
-   					function(data) {
-   						$("#star").css("background", "url('${path}" + data.background);
-   						$("#star").css("backgroundSize", data.backgroundSize);
-   					},
-   					'json'
-   				);
+	            favorites();
    				
             	customOverlay2.setMap(map);
             	selectOverlay = customOverlay2;
@@ -747,7 +732,7 @@
 	    markers = [];
 	}
 
-	// 검색결과 목록 하단에 페이지번호를 표시는 함수입니다
+	// 검색결과 목록 하단에 페이지번호를 표시하는 함수입니다
 	function displayPagination(pagination) {
 	    var paginationEl = document.getElementById('pagination'),
 	        fragment = document.createDocumentFragment(),
