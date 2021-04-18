@@ -261,22 +261,106 @@
     	border-radius: 5px;
     	margin: 16px 8px;
     }
-
+    
+    #review_wrap {
+    	width: 300px;
+		position: absolute;
+		top: 0;
+		right: 25px;
+		bottom: 0;
+		overflow-y: auto;
+		z-index: 1;
+		margin-top: 25px;
+		background-color: rgba(255, 255, 255, 0.9);
+		/*font-size: 12px;*/
+    }
+    
+    #reviewTitle {
+    	height: 50px;
+    	background-color: #eeeeee;
+    	overflow: hidden;
+    	text-overflow: ellipsis;
+    }
+    
+    #reviewTitle p {
+    	font-size: 14pt;
+    	font-weight: bold;
+    	line-height: 50px;
+    	text-align: center;
+    }
+    
+    #reviewContents {
+    	border-bottom: 1px solid gray;
+    	width: 100%;
+    	overflow: auto;
+    	padding: 0px 20px 20px 20px;
+    }
+    
+    #reviewForm {
+    	padding: 15px;
+    }
+	
+	#rating {
+		height: 30px;
+	}
+	
+	#rating a {
+		text-decoration: none;
+		color: gray;
+	}
+	
+	#rating a.on {
+		color: red;
+	}
+	
+	#contentBox {
+		height: 60px;
+		margin-top: 5px;
+	}
+	
+	.reviewBtn {
+		width: 60px;
+		height: 30px;
+		line-height: 30px;
+		margin: 0px;
+		padding: 0px;
+		border-radius: 0px;
+	}
+	
+	#reviewList .re_item {
+		border-bottom: 1px solid lightgray;
+		padding: 10px 0px 10px 0px;
+	}
+	
+	.re_name {
+	font-size: smaller;
+	color: gray;
+	}
+	
+	.re_date {
+		font-size: smaller;
+		color: gray;
+	}
+	
+	.re_empty {
+		text-align: center;
+		padding-top: 20px;
+	}
 </style>
 
 <div class="map_wrap">
 	<div id="map"></div>
 	
 	<form:form name="favoForm" id="favoForm" modelAttribute="mapVO" method="post">
-		<input type="hidden" id="member_id" name="member_id" value="${sessionScope.member.id}">
-		<input type="hidden" id="place-name" name="place_name">
-		<input type="hidden" id="address" name="address">
-		<input type="hidden" id="lat" name="lat">
-		<input type="hidden" id="lon" name="lon">
+		<input type="text" id="member_id" name="member_id" value="${sessionScope.member.id}">
+		<input type="text" id="place-name" name="place_name">
+		<input type="text" id="address" name="address">
+		<input type="text" id="lat" name="lat">
+		<input type="text" id="lon" name="lon">
 	</form:form>
 	
 	<div id="menu_wrap">
-        <div class="option" id="top">
+        <div class="option">
 			<form onsubmit="searchPlaces(); return false;">
 				<div class="form-group">
 					<input type="text" class="form-control" id="keyword" placeholder="검색어를 입력해주세요." style="width:220px;float:left;">
@@ -289,9 +373,195 @@
         	<div id="pagination"></div>
         </div>
     </div>
+    
+    <div id="review_wrap">
+	   	<div id="reviewTitle">
+	   		<p>장소명</p>
+	   	</div>
+    	<div id="reviewContents">
+    		<div id="reviewList">
+    			<%--
+    			<span class="re_rating">★★★★★ 5</span>
+	    		<p class="re_content">정말 맛없었습니다.</p>
+	    		<span class="re_name" style="font-size:smaller;color:gray;">작성자</span>
+	    		<span style="font-size:smaller;color:gray;">|</span>
+	    		<span class="re_date" style="font-size:smaller;color:gray;">작성일</span>
+				 --%>    		
+    		</div>
+    	</div>
+    	<form:form name="reviewForm" id="reviewForm" modelAttribute="reviewVO" method="post">
+    		<input type="hidden" name="rating" id="ratingBox" value="0">
+    		<div id="rating">
+    			<a href="#" title="0"></a>
+    			<a href="#" title="1">★</a>
+    			<a href="#" title="2">★</a> 
+    			<a href="#" title="3">★</a> 
+    			<a href="#" title="4">★</a> 
+    			<a href="#" title="5">★</a>
+	    		<span id="ratingComment">　0/5 평가해주세요</span>
+    		 </div>
+    		<input type="text" name="nickname" id="nicknameBox" class="form-control" maxlength="5" placeholder="닉네임을 입력해주세요.">
+    		<input type="text" name="content" id="contentBox" class="form-control" maxlength="50" placeholder="내용을 입력해주세요.">
+    		
+	   		<button type="button" id="reviewCloseBtn" class="btn btn-secondary reviewBtn" style="position:absolute;bottom:15px;">닫기</button>
+	   		<button type="button" id="reviewWriteBtn" class="btn btn-secondary reviewBtn" style="position:absolute;bottom:15px;right:15px;">작성</button>
+
+    	</form:form>
+    </div>
 </div>
     
 <script>
+	//별점기능
+	$('#rating a').click(function() {
+		$(this).parent().children("a").removeClass("on");
+		$(this).addClass("on").prevAll("a").addClass("on");
+		console.log($(this).attr("title"));
+		$('input[name=rating]').val($(this).attr("title"));
+		result = $(this).attr("title");
+		switch (result) {
+			case "1" :
+				$('#ratingComment').text("　1/5 별로예요");
+				break;
+			case "2" :
+				$('#ratingComment').text("　2/5 조금 아쉬워요");
+				break;
+			case "3" :
+				$('#ratingComment').text("　3/5 보통이에요");
+				break;
+			case "4" :
+				$('#ratingComment').text("　4/5 좋아요");
+				break;
+			case "5" :
+				$('#ratingComment').text("　5/5 최고예요");
+				break;
+			default :
+				$('#ratingComment').text("　0/5 평가해주세요");
+		}
+	});
+
+	//리뷰쓰기
+	$('#reviewWriteBtn').on("click", function() {
+		//공백체크
+		if ($('#nicknameBox').val().replace(/\s | /gi, "").length == 0) {
+			alert("닉네임을 입력해주세요.");
+			return false;
+		} else if ($('#contentBox').val().replace(/\s | /gi, "").length == 0) {
+			alert("내용을 입력해주세요.");
+			return false;
+		}
+		
+		var favo = document.favoForm;
+		var review = document.reviewForm;
+
+		var member_id = favo.member_id.value;
+		var place_name = favo.place_name.value;
+		var address = favo.address.value;
+		
+		var rating = review.rating.value;
+		var nickname = review.nickname.value;
+		var content = review.content.value;
+
+		var action = './reviewWrite';
+
+
+		$.post(
+			action,
+			{
+				member_id : member_id,
+				place_name : place_name,
+				address : address,
+				rating : rating,
+				nickname : nickname,
+				content : content
+			},
+			function(data) {
+				alert(data.msg);
+				
+				//리뷰 초기화
+				$('.re_item').remove();
+				$('.re_empty').remove();
+
+				$('input[name=rating]').val('0');
+				$('#rating a').parent().children("a").removeClass("on");
+				$('#ratingComment').text("　0/5 평가해주세요");
+				
+				$('#nicknameBox').val('');
+				$('#contentBox').val('');
+				
+				//리뷰 새로고침
+				$('#reviewBtn').trigger('click');
+			},
+			'json'
+		);
+	});
+
+	//리뷰닫기
+	$('#reviewCloseBtn').on("click", function() {
+		$('#review_wrap').hide();
+	});
+	
+	//리뷰보기
+	$(document).on("click", "#reviewBtn", function() {
+		//리뷰 초기화
+		$('.re_item').remove();
+		$('.re_empty').remove();
+
+		$('input[name=rating]').val('0');
+		$('#rating a').parent().children("a").removeClass("on");
+		$('#ratingComment').text("　0/5 평가해주세요");
+		
+		$('#nicknameBox').val('');
+		$('#contentBox').val('');
+		
+		$('#review_wrap').show();
+		
+		var form = document.favoForm;
+
+		var member_id = form.member_id.value;
+		var place_name = form.place_name.value;
+		var address = form.address.value;
+
+		var action = './reviewRead';
+
+		$.post(
+			action,
+			{
+				member_id : member_id,
+				place_name : place_name,
+				address : address
+			},
+			function(data) {
+				$.each(data.reviewDB, function(index, item) {
+					
+					console.log(item);
+
+					var el = document.createElement('div'),
+					itemStr = '<span class="re_rating">' + item.rating + '</span>' +
+						'<p class="re_content">' + item.content + '</p>' +
+						'<span class="re_name">' + item.nickname + " | " +'</span>' +
+						'<span class="re_date">' + item.reg_date.year + "." + item.reg_date.monthValue + "." + item.reg_date.dayOfMonth + '</span>';
+					
+					el.innerHTML = itemStr;
+					el.className = 're_item';
+
+					$('#reviewList').append(el);
+				});
+
+				if (data.msg) {
+					var el = document.createElement('div'),
+					itemStr = data.msg
+					
+					el.innerHTML = itemStr;
+					el.className = 're_empty';
+
+					$('#reviewList').append(el);
+				}
+				
+			},
+			'json'
+		);
+	});
+	
 	//즐겨찾기 등록/해제
 	$(document).on("click", "#star", function() {
 		var form = document.favoForm;
@@ -324,7 +594,6 @@
 
 	//즐겨찾기 표시
 	function favorites() {
-
 		var form = document.favoForm;
 	
 		var member_id = form.member_id.value;
@@ -353,6 +622,7 @@
 	//사이즈 맞추기
 	$(document).ready(function() {
 		resizeContent();
+		$('#review_wrap').hide();
 	});
 	
 	$(window).resize(function() {
@@ -360,9 +630,12 @@
 	});
 	
 	function resizeContent() {
-		var totalHeight = $("#menu_wrap").height();
-		<%--var topHeight = $("#top").height();--%>
+		var totalHeight = $('#menu_wrap').height();
 		$('#content').css({'height':(totalHeight-75)+'px'});
+		$('#review_wrap').css({'height':(totalHeight-55)+'px'});
+		
+		var totalHeight2 = $('#review_wrap').height();
+		$('#reviewContents').css({'height':(totalHeight2-245)+'px'});
 	}
 	
 	<%--
@@ -511,7 +784,7 @@
 			        			'</div>' +
 			        			'<div>' + 
 			        				'<a href="' + places[i].place_url + '" target="_blank" class="btn btn-secondary">' + '상세보기' + '</a>' +
-			        				'<button type="button" class="btn btn-secondary">' + '리뷰보기' + '</button>' +
+			        				'<button type="button" id="reviewBtn" class="btn btn-secondary">' + '리뷰보기' + '</button>' +
 			        			'</div>' + 
 			        		'</div>' + 
 			        	'</div>' +
@@ -599,6 +872,9 @@
 	            });
 
 	            kakao.maps.event.addListener(marker, 'click', function() {
+		            //리뷰닫기
+	            	$('#reviewCloseBtn').trigger('click');
+	            	
 	            	if (selectOverlay) {
 	            		selectOverlay.setMap(null);
 	            	}
@@ -654,6 +930,9 @@
 		 		}
 		 		// 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
 	            selectedMarker = marker;
+
+	            //리뷰닫기
+            	$('#reviewCloseBtn').trigger('click');
 
 	            if (selectOverlay) {
             		selectOverlay.setMap(null);

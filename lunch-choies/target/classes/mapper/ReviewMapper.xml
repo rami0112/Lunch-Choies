@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.ReviewMapper">
+
+	<select id="selectReview" parameterType="reviewVO" resultType="reviewVO">
+		select *
+		from review
+		inner join member
+		on review.member_id = member.id
+		where member.id = #{member_id}
+		and place_name = #{place_name}
+		and address = #{address}
+		order by review.reg_date desc;
+	</select>
+	
+	<insert id="insertReview" parameterType="reviewVO">
+		insert into
+		review (
+			member_id
+			,rating
+			, content
+			, nickname
+			, reg_date
+			, place_name
+			, address
+		) values (
+			#{member_id}
+			, #{rating}
+			, #{content}
+			, #{nickname}
+			, now()
+			, #{place_name}
+			, #{address}
+		)
+	</insert>
+</mapper>

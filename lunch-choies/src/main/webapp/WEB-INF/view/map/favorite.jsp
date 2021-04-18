@@ -435,7 +435,7 @@
 					// 지도에 표시되고 있는 마커를 제거합니다
 				    removeMarker();
 	
-					for (var i = 0; i < data.size; i++) {
+					for (var i = 0; i < data.mapDB.length; i++) {
 						// 마커를 생성하고 지도에 표시합니다
 						var positions = new kakao.maps.LatLng(data.mapDB[i].lat, data.mapDB[i].lon);
 						var marker = addMarker(positions);

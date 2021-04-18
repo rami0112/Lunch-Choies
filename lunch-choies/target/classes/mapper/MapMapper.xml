@@ -30,12 +30,14 @@
 			, lat
 			, lon
 			, member_id
+			, reg_date
 		) values (
 			#{place_name}
 			, #{address}
 			, #{lat}
 			, #{lon}
 			, #{member_id}
+			, now()
 		)
 	</insert>
 	

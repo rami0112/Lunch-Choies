@@ -84,12 +84,9 @@ public class MapController {
 		
 		List<MapVO> mapDB = mapService.selectMap(mapVO);
 		if (mapDB != null) {
-			/*for (int i = 0; i < mapDB.size(); i++) {*/
-				rs.put("size", mapDB.size());
 				rs.put("mapDB", mapDB);
 		}
 		return rs;
-		
 	}
 
 }
