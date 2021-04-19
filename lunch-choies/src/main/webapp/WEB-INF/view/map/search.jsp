@@ -312,7 +312,7 @@
 	}
 	
 	#rating a.on {
-		color: red;
+		color: #efa31d;
 	}
 	
 	#contentBox {
@@ -517,7 +517,7 @@
 	$(document).on("click", "#reviewBtn", function() {
 		
 		$('#review_wrap').show();
-
+		
 		//리뷰 초기화
 		reviewReset();
 		
@@ -540,6 +540,26 @@
 				$.each(data.reviewDB, function(index, item) {
 					
 					console.log(item);
+					console.log(item.rating);
+					switch (item.rating) {
+					case 1 :
+						item.rating = "⭐";
+						break;
+					case 2 :
+						item.rating = "⭐⭐";
+						break;
+					case 3 :
+						item.rating = "⭐⭐⭐";
+						break;
+					case 4 :
+						item.rating = "⭐⭐⭐⭐";
+						break;
+					case 5 :
+						item.rating = "⭐⭐⭐⭐⭐";
+						break;
+					default :
+						item.rating = "❌";
+					}
 
 					var el = document.createElement('div'),
 					itemStr = 
@@ -558,6 +578,7 @@
 					$('#reviewList').append(el);
 				});
 
+				//리뷰가 없을때
 				if (data.msg) {
 					var el = document.createElement('div'),
 					itemStr = data.msg
@@ -571,6 +592,8 @@
 			},
 			'json'
 		);
+
+		
 	});
 
 	//리뷰삭제
