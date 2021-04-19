@@ -22,4 +22,8 @@ public class ReviewDAO {
 	public int insertReview(ReviewVO reviewVO) {
 		return sqlSession.insert(NAMESPACE + "insertReview", reviewVO);
 	}
+	
+	public int deleteReview(ReviewVO reviewVO) {
+		return sqlSession.delete(NAMESPACE + "deleteReview", reviewVO);
+	}
 }

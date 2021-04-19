@@ -16,10 +16,12 @@
 		font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
 	}
 	
+	<%--
 	.map_wrap a, .map_wrap a:hover, .map_wrap a:active {
 		color: #000;
 		text-decoration: none;
 	}
+	--%>
 	
 	.map_wrap {
 		position:relative;
@@ -342,6 +344,12 @@
 		color: gray;
 	}
 	
+	a.re_delete, a:hover.re_delete  {
+		font-size: smaller;
+		color: gray;
+		text-decoration: none;
+	}
+	
 	.re_empty {
 		text-align: center;
 		padding-top: 20px;
@@ -439,6 +447,19 @@
 		}
 	});
 
+	//리뷰초기화
+	function reviewReset() {
+		$('.re_item').remove();
+		$('.re_empty').remove();
+
+		$('input[name=rating]').val('0');
+		$('#rating a').parent().children("a").removeClass("on");
+		$('#ratingComment').text("　0/5 평가해주세요");
+		
+		$('#nicknameBox').val('');
+		$('#contentBox').val('');
+	}
+
 	//리뷰쓰기
 	$('#reviewWriteBtn').on("click", function() {
 		//공백체크
@@ -476,17 +497,9 @@
 			},
 			function(data) {
 				alert(data.msg);
-				
-				//리뷰 초기화
-				$('.re_item').remove();
-				$('.re_empty').remove();
 
-				$('input[name=rating]').val('0');
-				$('#rating a').parent().children("a").removeClass("on");
-				$('#ratingComment').text("　0/5 평가해주세요");
-				
-				$('#nicknameBox').val('');
-				$('#contentBox').val('');
+				//리뷰 초기화
+				reviewReset();
 				
 				//리뷰 새로고침
 				$('#reviewBtn').trigger('click');
@@ -502,18 +515,11 @@
 	
 	//리뷰보기
 	$(document).on("click", "#reviewBtn", function() {
-		//리뷰 초기화
-		$('.re_item').remove();
-		$('.re_empty').remove();
-
-		$('input[name=rating]').val('0');
-		$('#rating a').parent().children("a").removeClass("on");
-		$('#ratingComment').text("　0/5 평가해주세요");
-		
-		$('#nicknameBox').val('');
-		$('#contentBox').val('');
 		
 		$('#review_wrap').show();
+
+		//리뷰 초기화
+		reviewReset();
 		
 		var form = document.favoForm;
 
@@ -536,10 +542,15 @@
 					console.log(item);
 
 					var el = document.createElement('div'),
-					itemStr = '<span class="re_rating">' + item.rating + '</span>' +
-						'<p class="re_content">' + item.content + '</p>' +
-						'<span class="re_name">' + item.nickname + " | " +'</span>' +
-						'<span class="re_date">' + item.reg_date.year + "." + item.reg_date.monthValue + "." + item.reg_date.dayOfMonth + '</span>';
+					itemStr = 
+						'<form:form name="reviewDeleteForm" modelAttribute="reviewVO" method="post">' +
+							'<input type="hidden" name="review_code" value=' + item.review_code + '>' +
+							'<span class="re_rating">' + item.rating + '</span>' +
+							'<p class="re_content">' + item.content + '</p>' +
+							'<span class="re_name">' + item.nickname + " | " + '</span>' +
+							'<span class="re_date">' + item.reg_date.year + "." + item.reg_date.monthValue + "." + item.reg_date.dayOfMonth + " | " + '</span>' + 
+							'<a href="#" class="re_delete" onclick="reviewDelete(' + item.review_code + ')">삭제</a>' +
+						'</form:form>';
 					
 					el.innerHTML = itemStr;
 					el.className = 're_item';
@@ -561,6 +572,31 @@
 			'json'
 		);
 	});
+
+	//리뷰삭제
+	function reviewDelete(review_code) {
+		var result = confirm("정말로 리뷰를 삭제하시겠습니까?");
+		if (result == true) {
+			var action = './reviewDelete';
+			
+			$.post(
+				action,
+				{
+					review_code : review_code
+				},
+				function(data) {
+					alert(data.msg);
+					reviewReset(); //리뷰 초기화
+					$('#reviewBtn').trigger('click'); //리뷰 새로고침
+					
+				},
+				'json'
+			);
+		} else {
+			return false;
+		}
+			
+	}
 	
 	//즐겨찾기 등록/해제
 	$(document).on("click", "#star", function() {

@@ -11,7 +11,7 @@
 		where member.id = #{member_id}
 		and place_name = #{place_name}
 		and address = #{address}
-		order by review.reg_date desc;
+		order by review.reg_date desc
 	</select>
 	
 	<insert id="insertReview" parameterType="reviewVO">
@@ -34,4 +34,9 @@
 			, #{address}
 		)
 	</insert>
+	
+	<delete id="deleteReview" parameterType="reviewVO">
+		delete from review
+		where review_code = #{review_code}
+	</delete>
 </mapper>

@@ -21,4 +21,8 @@ public class ReviewService {
 	public int insertReview(ReviewVO reviewVO) {
 		return reviewDAO.insertReview(reviewVO);
 	}
+	
+	public int deleteReview(ReviewVO reviewVO) {
+		return reviewDAO.deleteReview(reviewVO);
+	}
 }

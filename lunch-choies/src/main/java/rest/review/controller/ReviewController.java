@@ -48,4 +48,17 @@ public class ReviewController {
 		}
 		return rs;
 	}
+	
+	//리뷰삭제 ajax
+	@PostMapping(value="reviewDelete", produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public Map<String, Object> reviewDelete(ReviewVO reviewVO) {
+		Map<String, Object> rs = new HashMap<String, Object>();
+		
+		int result = reviewService.deleteReview(reviewVO);
+		if (result == 1) {
+			rs.put("msg", "리뷰가 삭제되었습니다.");
+		}
+		return rs;
+	}
 }
