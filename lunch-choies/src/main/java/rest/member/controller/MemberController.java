@@ -40,7 +40,7 @@ public class MemberController {
 	
 	@PostMapping("join")
 	public String join(MemberVO memberVO, Errors errors, Model model, HttpSession session, HttpServletRequest request) {
-		new MemberValidator().joinValidate(memberVO, errors);
+		new MemberValidator().validate(memberVO, errors);
 		if (errors.hasErrors()) {
 			model.addAttribute("member", memberVO);
 			return "member/join";
@@ -87,16 +87,17 @@ public class MemberController {
 	}
 	
 	@PostMapping("login")
-	public String login(MemberVO memberVO, Errors errors, Model model, HttpSession session) {
+	public String login(MemberVO memberVO, Model model, HttpSession session, HttpServletRequest request) {
 
 		MemberVO memberDB = memberService.selectMember(memberVO);
 		if (memberDB != null) {
 			session.setAttribute("member", memberDB);
 			return "redirect:/home";
 		} else {
-			
+			model.addAttribute("msg", "아이디 또는 비밀번호가 틀렸습니다.");
+			model.addAttribute("uri", request.getContextPath() + "/login");
+			return "common/alert";
 		}
-		return "member/login";
 	}
 	
 	//로그아웃

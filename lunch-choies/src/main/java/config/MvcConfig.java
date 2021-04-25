@@ -40,7 +40,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(authCheckInterceptor()).addPathPatterns("/map/**");
+		registry.addInterceptor(authCheckInterceptor()).addPathPatterns("/map/**", "/game/**");
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}
 	

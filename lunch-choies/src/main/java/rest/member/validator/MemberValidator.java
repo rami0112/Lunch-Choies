@@ -16,13 +16,6 @@ public class MemberValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		MemberVO memberVO = (MemberVO) target;
 
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "id", "required.id");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "required.password");
-	}
-	
-	public void joinValidate(Object target, Errors errors) {
-		MemberVO memberVO = (MemberVO) target;
-		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "id", "required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "member_name", "required");
@@ -31,5 +24,5 @@ public class MemberValidator implements Validator {
 			errors.rejectValue("passwordCheck", "required.passwordCheck");
 		}
 	}
-
+	
 }

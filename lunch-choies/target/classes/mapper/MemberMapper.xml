@@ -6,14 +6,8 @@
 	<select id="selectMember" parameterType="memberVO" resultType="memberVO">
 		select *
 		from member
-		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test = "id != null">
-				and id = #{id}
-			</if>
-			<if test = "password != null">
-				and password = #{password}
-			</if>
-		</trim>
+		where id = #{id}
+		and password = #{password}
 	</select>
 	
 	<insert id="insertMember" parameterType="memberVO">

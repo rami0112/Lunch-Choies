@@ -16,13 +16,6 @@
 		font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
 	}
 	
-	<%--
-	.map_wrap a, .map_wrap a:hover, .map_wrap a:active {
-		color: #000;
-		text-decoration: none;
-	}
-	--%>
-	
 	.map_wrap {
 		position:relative;
 		width: 100%;
@@ -205,23 +198,7 @@
 	#placesList li h5 {
 		font-weight: bold;
 	}
-	<%--
-	#favoForm {
-		width: 350px;
-		height: 200px;
-		position: absolute;
-		top: 0;
-		left: 50%;
-		bottom: 0;
-		overflow-y: auto;
-		z-index: 1;
-		margin: 120px 0px 0px 50px;
-		padding: 20px 20px 10px 20px;
-		background-color: rgba(255, 255, 255, 0.9);
-		border-radius: 15px;
-		font-size: 12px;
-	}
-	--%>
+
 	.wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 112px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
     .wrap * {padding: 0;margin: 0;}
     .wrap .info2 {width: 286px;height: 100px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
@@ -360,11 +337,11 @@
 	<div id="map"></div>
 	
 	<form:form name="favoForm" id="favoForm" modelAttribute="mapVO" method="post">
-		<input type="text" id="member_id" name="member_id" value="${sessionScope.member.id}">
-		<input type="text" id="place-name" name="place_name">
-		<input type="text" id="address" name="address">
-		<input type="text" id="lat" name="lat">
-		<input type="text" id="lon" name="lon">
+		<input type="hidden" id="member_id" name="member_id" value="${sessionScope.member.id}">
+		<input type="hidden" id="place-name" name="place_name">
+		<input type="hidden" id="address" name="address">
+		<input type="hidden" id="lat" name="lat">
+		<input type="hidden" id="lon" name="lon">
 	</form:form>
 	
 	<div id="menu_wrap">
@@ -537,6 +514,8 @@
 				address : address
 			},
 			function(data) {
+				$('#reviewTitle p').text(place_name);
+				
 				$.each(data.reviewDB, function(index, item) {
 					
 					console.log(item);
@@ -657,8 +636,7 @@
 	
 		var member_id = form.member_id.value;
 		var place_name = form.place_name.value;
-		var lat = form.lat.value;
-		var lon = form.lon.value;
+		var address = form.address.value;
 
 		var action = './favorites';
 
@@ -667,8 +645,7 @@
 			{
 				member_id : member_id,
 				place_name : place_name,
-				lat : lat,
-				lon : lon
+				address : address
 			},
 			function(data) {
 				$("#star").css("background", "url('${path}" + data.background);
@@ -901,6 +878,7 @@
            				var callback = function(result, status) {
            				    if (status === kakao.maps.services.Status.OK) {
            				    	document.getElementById('address').value = result[0].address.address_name;
+           				    	favorites();
            				    }
            				};
 
@@ -922,7 +900,7 @@
 		        	        
 		                	selectedMarker.setImage(markerImage);
 			            } 
-		                
+
 	                	marker.setImage(clickImage);
 		            }
 
@@ -937,8 +915,6 @@
 	            	if (selectOverlay) {
 	            		selectOverlay.setMap(null);
 	            	}
-	            	
-	            	favorites();
 	            	
        				customOverlay2.setMap(map);
 	            	selectOverlay = customOverlay2;
@@ -968,6 +944,7 @@
            				var callback = function(result, status) {
            				    if (status === kakao.maps.services.Status.OK) {
            				    	document.getElementById('address').value = result[0].address.address_name;
+           				    	favorites();
            				    }
            				};
            				
@@ -985,6 +962,7 @@
 		        	        markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions);
 		                	selectedMarker.setImage(markerImage);
 			            } 
+					
 	       	    	marker.setImage(clickImage);
 		 		}
 		 		// 클릭된 마커를 현재 클릭된 마커 객체로 설정합니다
@@ -997,9 +975,7 @@
             		selectOverlay.setMap(null);
             	} 
 
-	            favorites();
-   				
-            	customOverlay2.setMap(map);
+	            customOverlay2.setMap(map);
             	selectOverlay = customOverlay2;
 
 		 		};

@@ -4,7 +4,6 @@
 
 <style>
 	.mainBg {
-		/*background: url('resource/images/bg-masthead.jpg');*/
 		min-height: 100%;
     	background-position: center;
     	background-size: cover;
@@ -77,8 +76,8 @@
 	
 	<c:if test="${sessionScope.member != null}">
 		<div class="mainBtn"> 
-			<button type="button" class="btn btn-secondary" onClick="location.href='<c:url value="" />'">Random</button>
-			<button type="button" class="btn btn-outline-warning" onClick="location.href='<c:url value="" />'">Tournament</button>
+			<button type="button" class="btn btn-secondary" onClick="location.href='<c:url value="/game/random" />'">Random</button>
+			<button type="button" class="btn btn-outline-warning" onClick="location.href='<c:url value="/game/tournament" />'">Tournament</button>
 		</div>
 	</c:if>
 </div>

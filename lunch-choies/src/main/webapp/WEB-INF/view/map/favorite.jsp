@@ -231,7 +231,7 @@
    	#star {
    		width: 25px;
    		height: 25px;
-    	background: url('${path}/resource/images/favorite.png') no-repeat;
+    	background: url('${path}/resource/images/unfavorite.png') no-repeat;
     	background-size: contain;
     	border: 0px;
     	vertical-align: top;
@@ -251,11 +251,11 @@
 	<div id="map"></div>
 	
 	<form:form name="favoForm" id="favoForm" modelAttribute="mapVO" method="post">
-		<input type="hidden" name="member_id" id="member_id" value="${sessionScope.member.id}">
-		<input type="hidden" id="place_name" name="place_name">
-		<input type="hidden" id="address" name="address">
-		<input type="hidden" id="lat" name="lat">
-		<input type="hidden" id="lon" name="lon">
+		<input type="text" name="member_id" id="member_id" value="${sessionScope.member.id}">
+		<input type="text" id="place_name" name="place_name">
+		<input type="text" id="address" name="address">
+		<input type="text" id="lat" name="lat">
+		<input type="text" id="lon" name="lon">
 	</form:form>
 	<div id="menu_wrap">
 		<div id="content" style="position:absolute;overflow:auto;width:350px;"<%--top:75px;--%>>
@@ -291,6 +291,7 @@
 				alert(data.msg);
 				$("#star").css("background", "url('${path}" + data.background);
 				$("#star").css("backgroundSize", data.backgroundSize);
+				console.log(data.test);
 			},
 			'json'
 		);
@@ -298,13 +299,11 @@
 
 	//즐겨찾기 표시
 	function favorites() {
-
 		var form = document.favoForm;
 	
 		var member_id = form.member_id.value;
 		var place_name = form.place_name.value;
-		var lat = form.lat.value;
-		var lon = form.lon.value;
+		var address = form.address.value;
 
 		var action = './favorites';
 
@@ -313,10 +312,10 @@
 			{
 				member_id : member_id,
 				place_name : place_name,
-				lat : lat,
-				lon : lon
+				address : address
 			},
 			function(data) {
+				console.log(data.test);
 				$("#star").css("background", "url('${path}" + data.background);
 				$("#star").css("backgroundSize", data.backgroundSize);
 			},
@@ -386,7 +385,7 @@
 				member_id : member_id
 			},
 			function(data) {
-			if (data.size == 0) {
+			if (data.size == null) {
 				var totalHeight = $("#menu_wrap").height();
 				$('#menu_wrap').css({'line-height':(totalHeight)+'px'});
 				$('#menu_wrap').css('text-align', 'center');
@@ -394,7 +393,7 @@
 				$('#menu_wrap').text('저장한 즐겨찾기가 없습니다.');
 			}
 			
-			if (data.size != 0) 
+			if (data.size != null)  {
 
 				var markers = []; // 마커를 담을 배열입니다
 			
@@ -435,7 +434,7 @@
 					// 지도에 표시되고 있는 마커를 제거합니다
 				    removeMarker();
 	
-					for (var i = 0; i < data.mapDB.length; i++) {
+					for (var i = 0; i < data.size; i++) {
 						// 마커를 생성하고 지도에 표시합니다
 						var positions = new kakao.maps.LatLng(data.mapDB[i].lat, data.mapDB[i].lon);
 						var marker = addMarker(positions);
@@ -535,6 +534,7 @@
 				            });
 
 				            kakao.maps.event.addListener(marker, 'click', function() {
+				            	 
 				            	var latlng = marker.getPosition();
 
 			       				var geocoder = new kakao.maps.services.Geocoder();
@@ -543,6 +543,7 @@
 		         				var callback = function(result, status) {
 		         				    if (status === kakao.maps.services.Status.OK) {
 		         				    	document.getElementById('address').value = result[0].address.address_name;
+		         				    	favorites();
 		         				    }
 		         				};
 		         				
@@ -569,6 +570,7 @@
 		         				var callback = function(result, status) {
 		         				    if (status === kakao.maps.services.Status.OK) {
 		         				    	document.getElementById('address').value = result[0].address.address_name;
+		         				    	favorites();
 		         				    }
 		         				};
 		         				
@@ -676,6 +678,7 @@
 				        el.removeChild (el.lastChild);
 				    }
 				}
+			}
 			
 			}, 
 			'json'
